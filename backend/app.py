@@ -9,7 +9,10 @@ import io # Image data ko handle karne ke liye
 app = Flask(__name__)
 
 # NOTE: Replace with your actual Gemini API Key
-API_KEY = "AIzaSyBMjxBfPOhCixZQhRas17BmlIZQ2dUqNNQ" 
+import os
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+ 
 
 class MealPlannerBot:
     def __init__(self):
