@@ -4,47 +4,133 @@
     <meta charset="UTF-8">
     <title>Gemini Meal Planner Bot</title>
     <style>
-        /* Simple CSS for better look */
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .feature-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
-        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
-        textarea { width: 98%; height: 100px; padding: 5px; margin-top: 5px; border-radius: 4px; }
-        #result { margin-top: 20px; white-space: pre-wrap; background-color: #f4f4f4; padding: 15px; border-radius: 4px; }
+        /* CSS Updated for better look and consistency */
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background-color: #f4f7f6;
+        }
+        h1 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        h2 { color: #4CAF50; margin-top: 0; }
+        .feature-box { 
+            border: 1px solid #ddd; 
+            background-color: #fff;
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            margin-top: 10px;
+        }
+        button:hover { background-color: #45a049; }
+        textarea, input[type="text"], input[type="file"], select { 
+            width: 98%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            margin-bottom: 5px;
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+        }
+        #result { 
+            margin-top: 20px; 
+            white-space: pre-wrap; 
+            background-color: #e9ecef; 
+            padding: 15px; 
+            border-radius: 4px; 
+            border-left: 5px solid #4CAF50;
+        }
+        #ingredients_display {
+            font-size: 0.9em;
+            color: #007bff;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #e0f7fa;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
+    
+    <div style="margin-bottom: 20px;">
+        <label for="output_language" style="font-weight: bold;">Output Language Chunein:</label>
+        <select id="output_language">
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+        </select>
+    </div>
+    <hr>
+    
     <h1>🍽️ Gemini Meal Planner Bot</h1>
     
     <div class="feature-box">
-        <h2>1. Ingredients se Recipe Dhundhein</h2>
-        <label for="ingredients">Apne ingredients bataiye (e.g., Aloo, Tamatar, Matar):</label>
+        <h2>1. Find Recipe by Ingredients</h2>
+        <label for="ingredients">Enter your ingredients (e.g., Potato, Tomato, Peas):</label>
         <textarea id="ingredients"></textarea>
-        <button onclick="getRecipe()">Recipe Lao</button>
+        <button onclick="getRecipe()">Get Recipe</button>
+    </div>
+
+    <div class="feature-box">
+        <h2>2. Weekly Meal Plan</h2>
+        <label for="constraints">Enter your diet constraints (e.g., Low Carb, High Protein):</label>
+        <input type="text" id="constraints">
+        <button onclick="getMealPlan()">Get Plan</button>
     </div>
     
     <div class="feature-box">
-        <h2>2. Hafte bhar ka Meal Plan</h2>
-        <label for="constraints">Apni diet constraints bataiye (e.g., Low Carb, High Protein):</label>
-        <input type="text" id="constraints" style="width: 98%; padding: 5px;">
-        <button onclick="getMealPlan()">Plan Lao</button>
+        <h2>3. Recipe Conversion (Veg/Vegan)</h2>
+        <label for="recipe_name">Recipe Name to Convert (e.g., Butter Chicken):</label>
+        <input type="text" id="recipe_name" style="width: 98%; padding: 5px; margin-bottom: 10px;">
+        
+        <label for="conversion_type">Conversion Type:</label>
+        <select id="conversion_type" style="padding: 5px;">
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+        </select>
+        
+        <button onclick="convertRecipe()">Convert Recipe</button>
     </div>
 
+    <div class="feature-box">
+        <h2>4. 📸 Image Analysis for Meal Ideas</h2>
+        <label for="image_upload">Upload a photo of your ingredients (fridge/pantry):</label>
+        <input type="file" id="image_upload" accept="image/*">
+        
+        <button onclick="getRecipeFromImage()">Analyze Photo & Get Meal Ideas</button>
+        
+        <div id="ingredients_display"></div>
+    </div>
+    
     <h3>Result:</h3>
-    <div id="result">Yahan par result aayega...</div>
+    <div id="result">Results will appear here...</div>
 
     <script>
         const resultDiv = document.getElementById('result');
+        
+        function getSelectedLanguage() {
+            return document.getElementById('output_language').value;
+        }
 
-        // Feature 1: Get Recipe
+        // --- Feature 1: Get Recipe (Language Added) ---
         async function getRecipe() {
             const ingredients = document.getElementById('ingredients').value;
-            resultDiv.innerHTML = "Recipe dhundhi ja rahi hai...";
+            const lang = getSelectedLanguage(); 
+            resultDiv.innerHTML = `preparing recipe in ${lang}...`;
 
             try {
                 const response = await fetch('/api/get_recipe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ingredients: ingredients })
+                    body: JSON.stringify({ ingredients: ingredients, language: lang }) // Language added
                 });
                 
                 const data = await response.json();
@@ -59,16 +145,17 @@
             }
         }
 
-        // Feature 2: Get Weekly Meal Plan
+        // --- Feature 2: Get Weekly Meal Plan (Language Added) ---
         async function getMealPlan() {
             const constraints = document.getElementById('constraints').value;
-            resultDiv.innerHTML = "Meal Plan banaya ja raha hai...";
+            const lang = getSelectedLanguage(); 
+            resultDiv.innerHTML = `Your Meal is being prepared in ${lang}....`;
 
             try {
                 const response = await fetch('/api/get_plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ constraints: constraints })
+                    body: JSON.stringify({ constraints: constraints, language: lang }) // Language added
                 });
                 
                 const data = await response.json();
@@ -83,7 +170,77 @@
             }
         }
         
-        // Aapko Feature 3: Conversion ke liye bhi similar function banana hoga.
+        // --- Feature 3: Convert Recipe (NEW FUNCTION) ---
+        async function convertRecipe() {
+            const original_recipe = document.getElementById('recipe_name').value;
+            const conversion_type = document.getElementById('conversion_type').value;
+            const lang = getSelectedLanguage(); 
+            resultDiv.innerHTML = `Recipe converting to ${conversion_type} in ${lang}...`;
+
+            try {
+                const response = await fetch('/api/convert_recipe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        original_recipe: original_recipe,
+                        conversion_type: conversion_type,
+                        language: lang 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.result) {
+                    resultDiv.innerHTML = data.result;
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Network Error: Server se connection nahi ho paya.';
+            }
+        }
+        
+        // --- Feature 4: Get Recipe From Image (NEW FUNCTION) ---
+        async function getRecipeFromImage() {
+            const imageInput = document.getElementById('image_upload');
+            const imageFile = imageInput.files[0];
+            const lang = getSelectedLanguage();
+            const ingredientsDisplay = document.getElementById('ingredients_display');
+
+            if (!imageFile) {
+                ingredientsDisplay.innerHTML = "Please select an image file.";
+                resultDiv.innerHTML = "";
+                return;
+            }
+
+            resultDiv.innerHTML = `Image analyzing and planning meals in ${lang}... (Vision processing may take a few seconds)`;
+            ingredientsDisplay.innerHTML = ""; 
+
+            try {
+                // Use FormData for file upload
+                const formData = new FormData();
+                formData.append('image', imageFile);
+                formData.append('language', lang); 
+                
+                const response = await fetch('/api/vision_recipe', {
+                    method: 'POST',
+                    body: formData 
+                });
+                
+                const data = await response.json();
+                
+                if (data.result) {
+                    ingredientsDisplay.innerHTML = `Found Ingredients: ${data.ingredients_found}`;
+                    resultDiv.innerHTML = data.result;
+                } else {
+                    ingredientsDisplay.innerHTML = "Ingredients not found or analysis failed.";
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Network Error: Server se connection nahi ho paya.';
+                ingredientsDisplay.innerHTML = "";
+            }
+        }
     </script>
 </body>
 </html>
