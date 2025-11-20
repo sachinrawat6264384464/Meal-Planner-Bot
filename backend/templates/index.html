@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini Meal Planner Bot</title>
+    <style>
+        /* Simple CSS for better look */
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .feature-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        textarea { width: 98%; height: 100px; padding: 5px; margin-top: 5px; border-radius: 4px; }
+        #result { margin-top: 20px; white-space: pre-wrap; background-color: #f4f4f4; padding: 15px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🍽️ Gemini Meal Planner Bot</h1>
+    
+    <div class="feature-box">
+        <h2>1. Ingredients se Recipe Dhundhein</h2>
+        <label for="ingredients">Apne ingredients bataiye (e.g., Aloo, Tamatar, Matar):</label>
+        <textarea id="ingredients"></textarea>
+        <button onclick="getRecipe()">Recipe Lao</button>
+    </div>
+    
+    <div class="feature-box">
+        <h2>2. Hafte bhar ka Meal Plan</h2>
+        <label for="constraints">Apni diet constraints bataiye (e.g., Low Carb, High Protein):</label>
+        <input type="text" id="constraints" style="width: 98%; padding: 5px;">
+        <button onclick="getMealPlan()">Plan Lao</button>
+    </div>
+
+    <h3>Result:</h3>
+    <div id="result">Yahan par result aayega...</div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+
+        // Feature 1: Get Recipe
+        async function getRecipe() {
+            const ingredients = document.getElementById('ingredients').value;
+            resultDiv.innerHTML = "Recipe dhundhi ja rahi hai...";
+
+            try {
+                const response = await fetch('/api/get_recipe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ingredients: ingredients })
+                });
+                
+                const data = await response.json();
+                
+                if (data.result) {
+                    resultDiv.innerHTML = data.result;
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Network Error: Server se connection nahi ho paya.';
+            }
+        }
+
+        // Feature 2: Get Weekly Meal Plan
+        async function getMealPlan() {
+            const constraints = document.getElementById('constraints').value;
+            resultDiv.innerHTML = "Meal Plan banaya ja raha hai...";
+
+            try {
+                const response = await fetch('/api/get_plan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ constraints: constraints })
+                });
+                
+                const data = await response.json();
+                
+                if (data.result) {
+                    resultDiv.innerHTML = data.result;
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Network Error: Server se connection nahi ho paya.';
+            }
+        }
+        
+        // Aapko Feature 3: Conversion ke liye bhi similar function banana hoga.
+    </script>
+</body>
+</html>
