@@ -18,10 +18,10 @@ app.run(host="0.0.0.0", port=PORT)
 class MealPlannerBot:
     def __init__(self):
         try:
-            if not API_KEY:
+            if not GEMINI_API_KEY :
                 raise ValueError("API key not set.")
             
-            self.client = genai.Client(api_key=API_KEY)
+            self.client = genai.Client(api_key=GEMINI_API_KEY)
             self.model = "gemini-2.5-flash" # Default model for text generation
             print("MealPlannerBot initialized successfully.")
         except Exception as e:
