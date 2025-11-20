@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gemini Meal Planner Bot</title>
+    <title>NutriCare: Your Smart Meal Planner</title>
     <style>
         /* CSS Updated for better look and consistency */
         body { 
@@ -10,25 +10,73 @@
             max-width: 900px; 
             margin: 0 auto; 
             padding: 20px; 
-            background-color: #f4f7f6;
+            background-color: #e4e4e4;
+           
         }
+        
+        nav{
+        width: 100%;
+        height: auto;
+        background-color: rgb(237, 114, 21);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 10px;
+        }
+        nav h2{
+        color: #e0f7fa;
+        margin-left: 2rem;
+        }
+        .menu{
+        margin-right: 2rem;
+        }
+        .menu ul {
+       gap: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        }
+        .menu ul li {
+      list-style: none;
+      
+        
+        }
+        .menu ul li a {
+        text-decoration: none;
+        color: #e9ecef;
+        font-size: 1.2rem;
+        font-weight: 700;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+         .menu ul li a:hover{
+         color: #cf1818;
+         border-bottom: 2px solid black;
+         
+         }
         h1 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
-        h2 { color: #4CAF50; margin-top: 0; }
+        h2 { color: #fcf9f9; margin-top: 0;   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;}
         .feature-box { 
-            border: 1px solid #ddd; 
-            background-color: #fff;
+            border: none; 
+            background-color: #18cdd3;
             padding: 15px; 
-            margin-bottom: 20px; 
+            margin-bottom: 5px; 
             border-radius: 8px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 2px 2px 10px rgb(41, 40, 40);
+            
+            
+        }
+        .feature-box:hover{
+        background-color: #f48626;
+        
         }
         button { 
             padding: 10px 20px; 
-            background-color: #4CAF50; 
+            background-color: #cf1818; 
             color: white; 
             border: none; 
             cursor: pointer; 
-            border-radius: 4px; 
+            border-radius: 10px; 
             margin-top: 10px;
         }
         button:hover { background-color: #45a049; }
@@ -46,21 +94,31 @@
             white-space: pre-wrap; 
             background-color: #e9ecef; 
             padding: 15px; 
-            border-radius: 4px; 
-            border-left: 5px solid #4CAF50;
+            border-radius: 10px; 
+            border-left: 5px solid #ed5d03;
+            box-shadow: 2px 3px 10px black;
         }
         #ingredients_display {
             font-size: 0.9em;
-            color: #007bff;
+            color: #edeff1;
             margin-top: 10px;
             padding: 5px;
-            background-color: #e0f7fa;
+            background-color: #f48626;
             border-radius: 3px;
         }
     </style>
 </head>
 <body>
+    <nav>
+      <h2>NC</h2>
+      <div class="menu">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+      </div>
     
+    </nav>
     <div style="margin-bottom: 20px;">
         <label for="output_language" style="font-weight: bold;">Output Language Chunein:</label>
         <select id="output_language">
@@ -70,7 +128,7 @@
     </div>
     <hr>
     
-    <h1>🍽️ Gemini Meal Planner Bot</h1>
+    <h1>🍽️ NutriCare: Your Smart Meal Planner</h1>
     
     <div class="feature-box">
         <h2>1. Find Recipe by Ingredients</h2>

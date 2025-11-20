@@ -118,8 +118,13 @@ bot = MealPlannerBot()
 # --- Flask Routes ---
 
 @app.route('/')
-def home():
+def about():
     return render_template('index.html')
+
+
+@app.route('/about/')
+def home():
+    return render_template('about.html')
 
 @app.route('/api/get_recipe', methods=['POST'])
 def get_recipe_api():
