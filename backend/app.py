@@ -11,7 +11,8 @@ app = Flask(__name__)
 # NOTE: Replace with your actual Gemini API Key
 import os
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-
+PORT = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=PORT)
  
 
 class MealPlannerBot:
